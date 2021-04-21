@@ -11,7 +11,9 @@ module.exports = {
   renderHomePage: renderHomePage,
   verifyToken: verifyToken,
   UserLogin: UserLogin,
-  UserRegister: UserRegister
+  UserRegister: UserRegister,
+  GetUserProfile: GetUserProfile,
+  EditProfile: EditProfile
 };
 
 /**
@@ -109,4 +111,47 @@ if(userData.email === '' || userData.password === ''){
     }
   })
 }
+}
+/**
+* @name GetUserProfile
+* @param  {object} req HTTP request
+* @param  {object} res HTTP response
+*/
+async function GetUserProfile(req,res) {
+  try{
+    const userInfor = await Informations.findOne({Parent_id: req.userId})
+    const userAuth = await Authentication.findOne({User_id: req.userId})
+    res.status(200).send({
+      email: userAuth.email,
+      name: userInfor.name,
+      password: userAuth.password,
+      userId: req.userId,
+      phone: userInfor.phone,
+      avatar: userInfor.avatar
+    })
+  }
+  catch(err){
+    console.log(err)
+  } 
+}
+/**
+* @name EditProfile
+* @param  {object} req HTTP request
+* @param  {object} res HTTP response
+*/
+async function EditProfile(req,res) {
+  let userInfor
+  let userAuth
+  try{
+    userInfor = await Informations.findOne({Parent_id: req.userId})
+    userAuth = await Authentication.findOne({User_id: req.userId})
+    userAuth = req.body.email
+    userInfor.name = req.body.name
+    userAuth.password = req.body.password
+    userInfor.phone = req.body.phone
+    res.status(200).send('Success')
+  }
+  catch(err){
+    console.log(err)
+  } 
 }
