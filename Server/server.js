@@ -14,7 +14,7 @@ var Database = require('./db/database');
 var routes = require('./routes/core.server.routes');
 
 //app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(express.json())
 app.use(express.urlencoded())
 
